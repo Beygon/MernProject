@@ -10,10 +10,15 @@ import connectDb from "./config/dbConnect.js";
 //Database connection
 connectDb();
 
+//Bodyparser
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
 //Middlwares
 app.use("/api/users", userRoutes);
 app.use(notFound);
 app.use(errorHandler);
+
 
 app.listen(port, () => console.log(`Server has started at port ${port}`));
 
