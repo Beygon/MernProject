@@ -5,10 +5,13 @@ const port = process.env.PORT || 5000;
 const app = express();
 import userRoutes from "./routes/userRoutes.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
+import connectDb from "./config/dbConnect.js";
+
+//Database connection
+connectDb();
 
 //Middlwares
 app.use("/api/users", userRoutes);
-
 app.use(notFound);
 app.use(errorHandler);
 
