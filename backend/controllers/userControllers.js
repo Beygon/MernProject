@@ -5,8 +5,10 @@ import User from "../models/userModel.js";
 //Route
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
   const user = await User.findOne({ email });
-  if (user) {
+
+  if (user && (await User.matchedPassword(password))) {
     generateToken(res, user._id);
     res.status(201).json({
       id: user._id,
@@ -65,7 +67,13 @@ const loginUser = asyncHandler(async (req, res) => {
 // Route /api/users/logout
 // Post public
 const logout = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "Logout successfull" });
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({
+    message: "User logged out",
+  });
 });
 
 //@desc get user data
