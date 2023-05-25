@@ -4,6 +4,7 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 const app = express();
 import userRoutes from "./routes/userRoutes.js";
+import cookieparser from "cookie-parser";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 import connectDb from "./config/dbConnect.js";
 
@@ -12,12 +13,16 @@ connectDb();
 
 //Bodyparser
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 
+//cookieparser
+app.use(cookieparser());
 //Middlwares
 app.use("/api/users", userRoutes);
 app.use(notFound);
 app.use(errorHandler);
+
+
 
 
 app.listen(port, () => console.log(`Server has started at port ${port}`));
