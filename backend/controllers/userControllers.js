@@ -4,9 +4,20 @@ import User from "../models/userModel.js";
 //@desc Auth user/set token
 //Route
 const authUser = asyncHandler(async (req, res) => {
-  res.status(401);
-  throw new Error("Not found");
-  res.status(200).json({ message: "Auth user" });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    generateToken(res, user._id);
+    res.status(201).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+    });
+  } else {
+    res.status(401);
+    throw new Error("Wrong email or password");
+  }
 });
 
 //@desc Register user
